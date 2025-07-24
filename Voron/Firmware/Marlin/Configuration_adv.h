@@ -975,7 +975,7 @@
    * If not defined, probe limits will be used.
    * Override with 'M422 S<index> X<pos> Y<pos>'.
    */
-  #define Z_STEPPER_ALIGN_XY { {  10, 190 }, { 100,  10 }, { 190, 190 } }
+  #define Z_STEPPER_ALIGN_XY {{ 50, 50 }, { 170, 50 }, { 170, 200 }, { 50, 200 } }
 
   /**
    * Orientation for the automatically-calculated probe positions.
@@ -1008,7 +1008,7 @@
    * positions in the bed carriage, with one position per Z stepper in stepper
    * driver order.
    */
-  #define Z_STEPPER_ALIGN_STEPPER_XY { { 210.7, 102.5 }, { 152.6, 220.0 }, { 94.5, 102.5 } }
+  // #define Z_STEPPER_ALIGN_STEPPER_XY { { 35, 35 }, { 185, 35 }, { 185, 185 }, { 35, 185 } }
 
   #ifndef Z_STEPPER_ALIGN_STEPPER_XY
     // Amplification factor. Used to scale the correction step up or down in case
