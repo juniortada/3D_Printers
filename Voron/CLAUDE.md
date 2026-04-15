@@ -9,11 +9,12 @@ Este arquivo descreve o hardware, firmware e configurações da impressora Voron
 | Impressora       | Voron 2.4                        |
 | Área de impressão| 300 x 300 mm                     |
 | Placa mãe        | MKS Monster 8 v2                 |
-| Drivers          | TMC 2209 (X, Y, Z)               |
+| Drivers          | TMC 2226 (X, Y, Z) — compatível TMC2209, UART 3.3V |
 | Homing           | Sensorless (X, Y) via TMC 2209   |
-| Extrusora        | Stealthburner com Bowden         |
+| Extrusora        | Stealthburner com Bowden — driver A4988 no Driver 3 |
 | Hotend           | E3D V6                           |
 | Nivelamento      | BL Touch (G29)                   |
+| Fonte            | 12V 30A                          |
 
 ## Firmware
 
@@ -49,7 +50,16 @@ As variáveis entre `[]` são substituídas automaticamente pelo Orca Slicer.
 
 ## Notas de Configuração
 
-- **Sensorless homing**: sensibilidade dos drivers TMC 2209 ajustada em `Configuration.h` via `X_STALL_SENSITIVITY` e `Y_STALL_SENSITIVITY`
+- **Fonte 12V 30A**: usar `CHOPPER_TIMING CHOPPER_DEFAULT_12V` em `Configuration_adv.h` — NÃO alterar para 24V
+- **Mapeamento de drivers (MKS Monster8 v2)**:
+  - Driver 0: X | Driver 1: Y
+  - Driver 2-1: Z motor Front-Left (Marlin `Z`)
+  - Driver 3: Extrusor A4988 (Marlin `E0`) — fica nos pinos E0, NÃO conflita com Z2
+  - Driver 4: Z motor Rear-Left (Marlin `Z2`, usa pinos E1)
+  - Driver 5: Z motor Rear-Right (Marlin `Z3`, usa pinos E2)
+  - Driver 6: Z motor Front-Right (Marlin `Z4`, usa pinos E3)
+  - Marlin pula o E0 ao alocar Z2/Z3/Z4 porque `E_STEPPERS=1`
+- **Sensorless homing**: sensibilidade dos drivers TMC 2209 ajustada em `Configuration_adv.h` via `X_STALL_SENSITIVITY` e `Y_STALL_SENSITIVITY`
 - **BL Touch**: configurado como probe Z; G29 executa o mesh antes de iniciar a impressão
 - **Bowden**: comprimento do tubo e configurações de retração são críticos — ajustar no Orca Slicer e em `Configuration_adv.h`
 - **MKS Monster 8 v2**: flash via cartão SD com arquivo `.bin` renomeado conforme documentação da placa
