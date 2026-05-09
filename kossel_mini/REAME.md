@@ -2,15 +2,35 @@
 
 Firmware configurado para a impressora delta Kossel Mini com placa AVR e BLTouch.
 
+Base: exemplo oficial `config/examples/delta/kossel_mini/Configuration.h` do Marlin Configurations release-2.1.2.7, adaptado ao hardware desta máquina.
+
 ## Hardware
 
 | Componente | Especificação |
 |---|---|
-| Placa | AVR (Arduino Mega / RAMPS) |
-| Tipo | Delta (3 torres) |
+| Placa | RAMPS 1.4 (Arduino Mega 2560) — `BOARD_RAMPS_14_EFB` |
+| Tipo | Delta (3 torres, endstops MAX no topo) |
 | Probe | BLTouch |
 | Raio imprimível | 110mm (diâmetro 220mm) |
 | Haste diagonal | 235.5mm |
+| Drivers X/Y/Z | DRV8825 com 3 jumpers (1/32 microsteps → 160 steps/mm) |
+| Driver E0 | A4988 |
+| Termistores | Hotend e cama: 100k genérico (`TEMP_SENSOR_0=1`, `TEMP_SENSOR_BED=1`) |
+
+---
+
+## Estado atual da calibração
+
+A migração 2.1.2.6 → 2.1.2.7 zerou propositalmente as variáveis ajustáveis pelo G33 para uma recalibração limpa:
+
+| Define | Valor atual | Pós-G33 |
+|---|---|---|
+| `DELTA_ENDSTOP_ADJ` | `{ 0.0, 0.0, 0.0 }` | a calibrar |
+| `DELTA_TOWER_ANGLE_TRIM` | `{ 0.0, 0.0, 0.0 }` | a calibrar |
+| `DELTA_HEIGHT` | `230.0` (estimativa alta) | a calibrar |
+| `DELTA_RADIUS` | `120.0` (estimativa) | a calibrar |
+
+Após executar G33 e M500, copiar os valores reais do `M503` para o `Configuration.h` e recompilar.
 
 ---
 
@@ -49,6 +69,8 @@ Em delta os limites MAX devem ser **positivos** (espelho dos MIN). Se ambos fore
 
 Numa delta os carrinhos sobem em direção aos endstops (posição home = MAX). Se algum carrinho descer ao invés de subir no home, inverta o `INVERT_*_DIR` da torre correspondente **ou** inverta fisicamente o conector do motor no driver.
 
+> **Atenção DRV8825:** o DRV8825 tem polaridade de DIR invertida em relação ao A4988. Após a primeira gravação, comande `G28` com a mão pronta no botão de reset; se um carro descer, inverta `INVERT_*_DIR` daquela torre para `false` (ou vire fisicamente o conector do motor).
+
 ---
 
 ### 4. Direção de homing — sempre para MAX
@@ -68,13 +90,13 @@ Os endstops ficam no topo das torres. O home sempre sobe.
 ```cpp
 #define DELTA_PRINTABLE_RADIUS 110.0
 #define DELTA_DIAGONAL_ROD     235.5
-#define DELTA_HEIGHT           223.65   // calibrado com G33
-#define DELTA_RADIUS           118.92   // calibrado com G33
-#define DELTA_ENDSTOP_ADJ      { 0.0, -3.08, -3.37 }   // calibrado com G33
-#define DELTA_TOWER_ANGLE_TRIM { -1.80, +0.01, +1.79 } // calibrado com G33
+#define DELTA_HEIGHT           230.0   // estimativa alta — sobrescrito pelo G33
+#define DELTA_RADIUS           120.0   // estimativa — sobrescrito pelo G33
+#define DELTA_ENDSTOP_ADJ      { 0.0, 0.0, 0.0 }   // a calibrar com G33
+#define DELTA_TOWER_ANGLE_TRIM { 0.0, 0.0, 0.0 }   // a calibrar com G33
 ```
 
-`DELTA_HEIGHT` é o valor mais crítico: define quantos mm o bico está acima da cama quando os carrinhos estão nos endstops. Se estiver muito baixo, o probe não alcança a cama durante o G33.
+`DELTA_HEIGHT` é o valor mais crítico: define quantos mm o bico está acima da cama quando os carrinhos estão nos endstops. **Começamos com 230.0 propositalmente alto** — assim o probe nunca bate na cama no primeiro G33. O G33 vai reduzir esse valor para o real.
 
 ---
 
@@ -101,7 +123,7 @@ Copiar os valores de `H`, `R`, endstop adj e tower angle trim do resultado do G3
 ### 7. Margem de probing
 
 ```cpp
-#define PROBING_MARGIN 15   // raio efetivo = DELTA_PRINTABLE_RADIUS - 15 = 95mm
+#define PROBING_MARGIN 10   // raio efetivo = DELTA_PRINTABLE_RADIUS - 10 = 100mm
 ```
 
 Substitui o antigo `DELTA_CALIBRATION_RADIUS` (removido no Marlin 2.x). Define a margem de segurança entre a borda da área imprimível e os pontos de medição do G33 e G29.
@@ -138,11 +160,32 @@ Necessário para que M500/M501 funcionem. Sem isso, os valores do G33 só sobrev
 
 ## Fluxo de configuração inicial
 
-1. Compilar e fazer upload do firmware
-2. `G28` — verificar se os três carrinhos sobem corretamente
-3. `G33` — calibração da geometria delta
-4. `M500` — salvar na EEPROM
-5. Atualizar `Configuration.h` com os valores do G33
-6. Ajustar Z offset do BLTouch via M851
-7. `G29` — nivelamento da cama (mesh)
-8. `M500` — salvar mesh na EEPROM
+1. Compilar (`pio run -e mega2560`) e fazer upload (`pio run -e mega2560 -t upload`)
+2. Conectar console serial em 115200 (Pronterface, OctoPrint ou `pio device monitor -b 115200`)
+3. `M502` + `M500` + `M501` — reset da EEPROM com os defaults do `.h`
+4. `G28` — verificar se os três carrinhos sobem em direção aos endstops MAX
+5. (Opcional) Ajuste manual grosso via `M666 X<n> Y<n> Z<n>` se uma torre estiver visivelmente fora
+6. `M280 P0 S10` / `M280 P0 S90` — testar deploy/stow do BLTouch
+7. `G28` + `G33 P4 V3` — calibração automática (repetir 1–2 vezes até stddev < 0,05mm)
+8. `M500` — salvar na EEPROM
+9. `M503` — anotar valores e copiar para o `Configuration.h` (DELTA_HEIGHT, DELTA_RADIUS, DELTA_ENDSTOP_ADJ, DELTA_TOWER_ANGLE_TRIM)
+10. Ajuste fino do Z offset do BLTouch via `M851 Z<valor>` + `M500`
+11. `G28` + `G29` — mesh bilinear da cama
+12. `M500` — salvar mesh na EEPROM
+13. Garantir `M420 S1` no start G-code do slicer para aplicar a mesh nos prints
+
+## Sincronização entre os dois caminhos
+
+Após edições, manter sincronizado:
+
+```bash
+SRC=/home/junior/Documentos/upload/Marlin-2.1.2.7-kossel/Marlin
+DST=/home/junior/Projetos/3D_Printers/kossel_mini
+cp "$SRC/Configuration.h"     "$DST/Configuration.h"
+cp "$SRC/Configuration_adv.h" "$DST/Configuration_adv.h"
+```
+
+| Caminho | Estrutura |
+|---|---|
+| `/home/junior/Documentos/upload/Marlin-2.1.2.7-kossel/` | árvore Marlin completa (compila daqui) |
+| `/home/junior/Projetos/3D_Printers/kossel_mini/` | apenas backup dos `.h` (raiz) |
