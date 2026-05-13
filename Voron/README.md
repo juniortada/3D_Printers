@@ -91,7 +91,7 @@ O binário gerado ficará em:
 
 **4. Instalar na placa**
 
-1. Renomeie o arquivo para `mks_monster8.bin` (a MKS Monster 8 v2 exige esse nome exato para o bootloader reconhecer)
+1. Renomeie o arquivo para `mks_monster8.bin` ou no meu caso funcionou com `firmware.bin` (a MKS Monster 8 v2 exige esse nome exato para o bootloader reconhecer)
 2. Copie o `.bin` para a **raiz** de um cartão SD formatado em FAT32
 3. Insira o cartão SD na impressora com ela **desligada**
 4. Ligue a impressora — o LED da placa piscará durante o flash (~10 segundos)
