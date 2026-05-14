@@ -32,6 +32,9 @@
   Os rolamentos necessários são facilmente encontrados em lojas físicas especializadas.
   - https://pt.aliexpress.com/item/1005004142186208.html
 
+  <img width="940" height="541" alt="Captura de tela de 2026-05-14 14-18-26" src="https://github.com/user-attachments/assets/79308dda-f1f8-410a-8819-b67f2a6a40c2" />
+
+
   Dica importante, as polias 80T que são as mais caras NÃO precisam ser de aluminio
   (na verdade nenhuma precisa, é fácil encontrar todos os modelos no thingiverse),
   podem ser impressas, estou utilizando impressas no extrussor, as outras eu já tinha de alumínio. 
@@ -57,6 +60,9 @@ Pode ser comprado no mercado livre/loja de materiais elétricos. Somente exemplo
   MKS Monster 8 V2 + driver TMC 2209, vou colocar link do aliexpress mas o preço pode variar, procure 
   o vendedor com melhor cotação no dia.
   - https://pt.aliexpress.com/item/1005005571907852.html
+
+  <img width="454" height="395" alt="Captura de tela de 2026-05-14 16-07-42" src="https://github.com/user-attachments/assets/373a599f-177c-45b9-a5f0-64933cf7d7b5" />
+
   
   Aqui vai outra dica importante, com a monster 8 você já controla todos os motores + dois extrusores, 
   sem precisar de uma ebb ou placa adicional.
