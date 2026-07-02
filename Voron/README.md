@@ -1,6 +1,11 @@
 # Voron 2.4
 
-## Hardware
+> **Estado atual:** a máquina roda **Klipper** (configs em `Firmware/Klipper/`), fonte **24V**
+> (Lumanti Slim 400W), com **2 toolheads** (Tapchanger/OptoTap + docks StealthChanger),
+> hotend Bambu e 2× extrusor Voron M4 bowden. Homing: X sensorless, Y físico, Z por OptoTap.
+> O conteúdo abaixo descreve o **build Marlin original** (legado, em `Firmware/Marlin/`).
+
+## Hardware (build Marlin original — legado)
 
 - Bed 300x300
 - Board MKS Monster 8 v2

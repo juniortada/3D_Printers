@@ -47,7 +47,8 @@
   - https://github.com/VoronDesign/Voron-2/blob/Voron2.4/STLs/Superceded_Parts/%5Ba%5D_stopgap_80T_hubbed_gear.stl
 
 ### Eletronica
-Atualmente estou utilizando fonte 12v, mas já vou fazer upgrade para 24v.
+Atualmente utilizando fonte **24V** (Lumanti Slim 400W / 16,6A). A mesa aquecida é AC via SSR,
+então não pesa nessa fonte. (Histórico: comecei em 12V e migrei para 24V.)
 Pode ser comprado no mercado livre/loja de materiais elétricos. Somente exemplo, procure a com frete grátis ou loja física.
  - https://www.mercadolivre.com.br/kit-especial-para-vacinahotbh/p/MLB2052813762
  - https://www.mercadolivre.com.br/fonte-de-alimentacao-chaveada-ms-400w-24v-166a-bivolt/up/MLBU2863288042
@@ -135,10 +136,9 @@ Pode ser comprado no mercado livre/loja de materiais elétricos. Somente exemplo
     
     
   ##### HotEnd e Extrusor
-  Estou utilizando um clone E3D v6 12v somente porque já tinha também.
-  Essa é a economia que estou mais sofrendo até aqui, não acho que vale a pena.
-  Vou trocar por hotend Bambu 24v ou E3D REVO 24v.
-  Vou deixar o link dos clones mas realmente não indico essa economia. 
+  Atualmente uso hotend **Bambu 24V** (um por ferramenta, com o toolchanger de 2 toolheads).
+  No começo usei um clone E3D v6 12v só porque já tinha — foi a economia que mais me fez sofrer,
+  não vale a pena. Deixo o link dos clones abaixo, mas realmente não indico essa economia. 
   - https://www.mercadolivre.com.br/hotend-v6-e3d-all-metal-bowden-175mm-12v-40w-impressora-3d/p/MLB52904694
   - https://pt.aliexpress.com/item/1005010072331903.html
   - https://pt.aliexpress.com/item/1005005119688537.html

@@ -9,20 +9,20 @@ Este arquivo descreve o hardware, firmware e configurações da impressora Voron
 | Impressora       | Voron 2.4                        |
 | Área de impressão| 300 x 300 mm                     |
 | Placa mãe        | MKS Monster 8 v2                 |
-| Drivers          | TMC 2226 (X, Y, Z) — compatível TMC2209, UART 3.3V |
-| Homing           | Sensorless (X, Y) via TMC 2209   |
-| Extrusora        | Stealthburner com Bowden — driver A4988 no Driver 3 |
-| Hotend           | E3D V6                           |
-| Nivelamento      | BL Touch (G29)                   |
-| Fonte            | 12V 30A                          |
+| Drivers          | TMC 2209 (X, Y, 4×Z), UART 3.3V — extrusores em A4988 |
+| Ferramentas      | **2 toolheads** — Tapchanger/OptoTap + docks StealthChanger (adaptador Dragonburner) |
+| Homing           | X **sensorless** (StallGuard TMC2209) · Y endstop físico · Z **OptoTap** por ferramenta |
+| Extrusores       | 2× Voron M4 (Mobius) bowden, idênticos — A4988 nos slots E0 e E4 |
+| Hotend           | Bambu (um por ferramenta)        |
+| Nivelamento      | QGL + bed_mesh via OptoTap da ferramenta ativa (T0 de referência) |
+| Fonte            | **24V** — Lumanti Slim 400W / 16,6A (mesa aquecida em AC via SSR, fora da fonte) |
 
 ## Firmware
 
-- **Marlin 2**
-- Arquivos em `Firmware/Marlin/`:
-  - `Configuration.h` — configurações principais
-  - `Configuration_adv.h` — configurações avançadas
-  - `mks_monster8.bin` — binário compilado para a placa
+- **Klipper** (firmware ativo) — configs em `Firmware/Klipper/` (`printer.cfg` + includes:
+  `steppers.cfg`, `tmc.cfg`, `extruder.cfg`, `toolchanger.cfg`, `homing.cfg`, `fans.cfg`, etc.).
+  MCU compilado para STM32F407 (bootloader 48KiB, USB) e gravado via SD (`mks_monster8.bin`).
+- **Marlin 2** (legado) — em `Firmware/Marlin/`. As notas de Marlin abaixo são históricas.
 
 ## Slicer
 
@@ -50,7 +50,9 @@ As variáveis entre `[]` são substituídas automaticamente pelo Orca Slicer.
 
 ## Notas de Configuração
 
-- **Fonte 12V 30A**: usar `CHOPPER_TIMING CHOPPER_DEFAULT_12V` em `Configuration_adv.h` — NÃO alterar para 24V
+- **Fonte 24V** (Lumanti Slim 400W / 16,6A): a máquina roda em 24V. A nota antiga de 12V
+  (`CHOPPER_DEFAULT_12V`) valia só para o Marlin 12V legado — no Klipper isso não se aplica.
+  Mesa aquecida é **AC via SSR** (não pesa na fonte 24V).
 - **Mapeamento de drivers (MKS Monster8 v2)**:
   - Driver 0: X | Driver 1: Y
   - Driver 2-1: Z motor Front-Left (Marlin `Z`)
