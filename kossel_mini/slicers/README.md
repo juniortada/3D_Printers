@@ -63,14 +63,13 @@ O script copia os JSON, cria os `.info` e aponta a textura e o modelo da placa p
 ### Conferir depois de instalar
 
 1. A mesa aparece redonda, com as zonas vermelhas na frente-esquerda (X, a maior), na frente-direita (Y) e atrás (Z), como na prévia.
-2. O tipo de mesa (Plate type) mostra **Textured PEI Plate**. Se o seu PEI for liso, troque para Smooth PEI / High Temp Plate.
+2. Escolha o tipo de mesa (**Plate type**, acima da mesa): **Smooth PEI Plate / High Temp Plate** ou **Textured PEI Plate**, conforme o seu PEI. O Orca guarda a escolha por impressora, e a temperatura da mesa sai do filamento conforme esse tipo.
 
 ## Impressora
 
 | Configuração | Valor |
 |---|---|
 | G-code | `marlin2`, extrusão relativa (`M83`) com `G92 E0` a cada camada |
-| Tipo de mesa padrão | Textured PEI Plate (a temperatura vem do perfil de filamento) |
 | Retração | 2,8mm a 55mm/s, retorno a 35mm/s, wipe 0,5mm, z-hop 0,4mm só em superfícies de topo |
 | Limites da máquina | Os do firmware (acel. 2000, impressão 700, retração 5000, E 500, jerk 10 / E 1,5); `emit_machine_limits_to_gcode` desligado: servem só para estimar o tempo |
 

@@ -85,7 +85,6 @@
         "104.6x-9.151"
     ],
     "printable_height": "115",
-    "default_bed_type": "Textured PEI Plate",
     "bed_custom_texture": "kossel_dragon_burner_bed.svg",
     "bed_custom_model": "kossel_dragon_burner_plate.stl",
     "extruder_clearance_radius": "45",
