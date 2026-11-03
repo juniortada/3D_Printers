@@ -1,0 +1,187 @@
+{
+    "type": "machine",
+    "from": "User",
+    "inherits": "MyMarlin 0.4 nozzle",
+    "is_custom_defined": "0",
+    "name": "Kossel Mini Dragon Burner 0.4",
+    "printer_settings_id": "Kossel Mini Dragon Burner 0.4",
+    "gcode_flavor": "marlin2",
+    "printer_structure": "delta",
+    "nozzle_diameter": [
+        "0.4"
+    ],
+    "printable_area": [
+        "105x0",
+        "104.6x9.151",
+        "103.405x18.233",
+        "101.422x27.176",
+        "98.668x35.912",
+        "95.162x44.375",
+        "90.933x52.5",
+        "86.011x60.226",
+        "80.435x67.493",
+        "74.246x74.246",
+        "67.493x80.435",
+        "60.226x86.011",
+        "52.5x90.933",
+        "44.375x95.162",
+        "35.912x98.668",
+        "27.176x101.422",
+        "18.233x103.405",
+        "9.151x104.6",
+        "0x105",
+        "-9.151x104.6",
+        "-18.233x103.405",
+        "-27.176x101.422",
+        "-35.912x98.668",
+        "-44.375x95.162",
+        "-52.5x90.933",
+        "-60.226x86.011",
+        "-67.493x80.435",
+        "-74.246x74.246",
+        "-80.435x67.493",
+        "-86.011x60.226",
+        "-90.933x52.5",
+        "-95.162x44.375",
+        "-98.668x35.912",
+        "-101.422x27.176",
+        "-103.405x18.233",
+        "-104.6x9.151",
+        "-105x0",
+        "-104.6x-9.151",
+        "-103.405x-18.233",
+        "-101.422x-27.176",
+        "-98.668x-35.912",
+        "-95.162x-44.375",
+        "-90.933x-52.5",
+        "-86.011x-60.226",
+        "-80.435x-67.493",
+        "-74.246x-74.246",
+        "-67.493x-80.435",
+        "-60.226x-86.011",
+        "-52.5x-90.933",
+        "-44.375x-95.162",
+        "-35.912x-98.668",
+        "-27.176x-101.422",
+        "-18.233x-103.405",
+        "-9.151x-104.6",
+        "0x-105",
+        "9.151x-104.6",
+        "18.233x-103.405",
+        "27.176x-101.422",
+        "35.912x-98.668",
+        "44.375x-95.162",
+        "52.5x-90.933",
+        "60.226x-86.011",
+        "67.493x-80.435",
+        "74.246x-74.246",
+        "80.435x-67.493",
+        "86.011x-60.226",
+        "90.933x-52.5",
+        "95.162x-44.375",
+        "98.668x-35.912",
+        "101.422x-27.176",
+        "103.405x-18.233",
+        "104.6x-9.151"
+    ],
+    "printable_height": "115",
+    "bed_custom_texture": "kossel_dragon_burner_bed.svg",
+    "bed_custom_model": "kossel_dragon_burner_plate.stl",
+    "extruder_clearance_radius": "45",
+    "max_layer_height": [
+        "0.28"
+    ],
+    "min_layer_height": [
+        "0.08"
+    ],
+    "retraction_length": [
+        "2.8"
+    ],
+    "retraction_speed": [
+        "55"
+    ],
+    "deretraction_speed": [
+        "35"
+    ],
+    "retraction_minimum_travel": [
+        "1"
+    ],
+    "wipe": [
+        "1"
+    ],
+    "wipe_distance": [
+        "0.5"
+    ],
+    "z_hop": [
+        "0.4"
+    ],
+    "retract_lift_enforce": [
+        "Top Only"
+    ],
+    "emit_machine_limits_to_gcode": "0",
+    "machine_max_acceleration_x": [
+        "3000",
+        "3000"
+    ],
+    "machine_max_acceleration_y": [
+        "3000",
+        "3000"
+    ],
+    "machine_max_acceleration_z": [
+        "3000",
+        "3000"
+    ],
+    "machine_max_acceleration_e": [
+        "500",
+        "500"
+    ],
+    "machine_max_acceleration_extruding": [
+        "1500",
+        "1500"
+    ],
+    "machine_max_acceleration_retracting": [
+        "5000",
+        "5000"
+    ],
+    "machine_max_acceleration_travel": [
+        "3000",
+        "3000"
+    ],
+    "machine_max_speed_x": [
+        "500",
+        "500"
+    ],
+    "machine_max_speed_y": [
+        "500",
+        "500"
+    ],
+    "machine_max_speed_z": [
+        "500",
+        "500"
+    ],
+    "machine_max_speed_e": [
+        "25",
+        "25"
+    ],
+    "machine_max_jerk_x": [
+        "10",
+        "10"
+    ],
+    "machine_max_jerk_y": [
+        "10",
+        "10"
+    ],
+    "machine_max_jerk_z": [
+        "10",
+        "10"
+    ],
+    "machine_max_jerk_e": [
+        "1.5",
+        "1.5"
+    ],
+    "use_relative_e_distances": "1",
+    "machine_start_gcode": "; Kossel Mini + Dragon Burner, Marlin 2.1.2.9\nG90\nM83\nM140 S[bed_temperature_initial_layer_single]\nG28\nM190 S[bed_temperature_initial_layer_single]\nG33 O P1 ; recalibra a altura com o probe no centro da mesa (faz o homing)\nG29 L-80 R70 F-90 B80 ; grade com todos os pontos a >= 10 mm das torres\nG1 X0 Y-60 Z10 F3000\nM104 S[nozzle_temperature_initial_layer]\nM109 S[nozzle_temperature_initial_layer]\nG92 E0\nG1 X-40 Y-55 Z0.3 F3000 ; purga na frente, longe das torres\nG1 X40 Y-55 E15 F1000\nG92 E0\nG1 Z2 F3000",
+    "machine_end_gcode": "G92 E0\nG1 E-3 F2100\nM104 S0\nM140 S0\nM107\nG28 ; delta: o efetor sobe ao topo, longe da peca\nM84",
+    "layer_change_gcode": ";AFTER_LAYER_CHANGE\n;[layer_z]\nG92 E0",
+    "version": "2.3.0.3"
+}
