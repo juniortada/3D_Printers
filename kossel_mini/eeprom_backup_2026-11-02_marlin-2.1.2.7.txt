@@ -1,0 +1,116 @@
+start
+Marlin 2.1.2.7
+echo: Last Updated: 2026-01-22 | Author: (Junior Tada, Kossel Mini 2.1.2.7)
+echo: Compiled: May  9 2026
+echo: Free Memory: 3412  PlannerBufferBytes: 1200
+echo:V88 stored settings retrieved (727 bytes; crc 37114)
+echo:SD card released
+=====[boot end]=====
+>>> M115
+FIRMWARE_NAME:Marlin 2.1.2.7 (May  9 2026 20:41:19) SOURCE_CODE_URL:github.com/MarlinFirmware/Marlin PROTOCOL_VERSION:1.0 MACHINE_TYPE:Mini Kossel EXTRUDER_COUNT:1 UUID:cede2a2f-41a2-4748-9b12-c55c62f367ff
+Cap:SERIAL_XON_XOFF:0
+Cap:BINARY_FILE_TRANSFER:0
+Cap:EEPROM:1
+Cap:VOLUMETRIC:1
+Cap:AUTOREPORT_POS:0
+Cap:AUTOREPORT_TEMP:1
+Cap:PROGRESS:0
+Cap:PRINT_JOB:1
+Cap:AUTOLEVEL:1
+Cap:RUNOUT:0
+Cap:Z_PROBE:1
+Cap:LEVELING_DATA:1
+Cap:BUILD_PERCENT:0
+Cap:SOFTWARE_POWER:1
+Cap:TOGGLE_LIGHTS:0
+Cap:CASE_LIGHT_BRIGHTNESS:0
+Cap:EMERGENCY_PARSER:0
+Cap:HOST_ACTION_COMMANDS:0
+Cap:PROMPT_SUPPORT:0
+Cap:SDCARD:1
+Cap:MULTI_VOLUME:0
+Cap:REPEAT:0
+Cap:SD_WRITE:1
+Cap:AUTOREPORT_SD_STATUS:0
+Cap:LONG_FILENAME:0
+Cap:LFN_WRITE:0
+Cap:CUSTOM_FIRMWARE_UPLOAD:0
+Cap:EXTENDED_M20:0
+Cap:THERMAL_PROTECTION:1
+Cap:MOTION_MODES:0
+Cap:ARCS:1
+Cap:BABYSTEPPING:0
+Cap:CHAMBER_TEMPERATURE:0
+Cap:COOLER_TEMPERATURE:0
+Cap:MEATPACK:0
+Cap:CONFIG_EXPORT:0
+ok
+>>> M503
+echo:; Linear Units:
+echo:  G21 ; (mm)
+echo:; Temperature Units:
+echo:  M149 C ; Units in Celsius
+echo:; Filament settings (Disabled):
+echo:  M200 S0 D1.75
+echo:; Steps per unit:
+echo:  M92 X160.00 Y160.00 Z160.00 E575.00
+echo:; Max feedrates (units/s):
+echo:  M203 X500.00 Y500.00 Z500.00 E25.00
+echo:; Max Acceleration (units/s2):
+echo:  M201 X3000.00 Y3000.00 Z3000.00 E500.00
+echo:; Acceleration (units/s2) (P<print-accel> R<retract-accel> T<travel-accel>):
+echo:  M204 P700.00 R5000.00 T3000.00
+echo:; Advanced (B<min_segment_time_us> S<min_feedrate> T<min_travel_feedrate> X<max_jerk> Y<max_jerk> Z<max_jerk> E<max_jerk>):
+echo:  M205 B20000.00 S0.00 T0.00 X10.00 Y10.00 Z2.00 E1.50
+echo:; Auto Bed Leveling:
+echo:  M420 S0 ; Leveling OFF
+echo:  G29 W I0 J0 Z0.20332
+echo:  G29 W I1 J0 Z0.35597
+echo:  G29 W I2 J0 Z0.09083
+echo:  G29 W I3 J0 Z0.08280
+echo:  G29 W I4 J0 Z0.08329
+echo:  G29 W I0 J1 Z-0.00724
+echo:  G29 W I1 J1 Z-0.01490
+echo:  G29 W I2 J1 Z-0.01885
+echo:  G29 W I3 J1 Z0.01115
+echo:  G29 W I4 J1 Z-0.01296
+echo:  G29 W I0 J2 Z-0.02509
+echo:  G29 W I1 J2 Z0.02447
+echo:  G29 W I2 J2 Z0.05132
+echo:  G29 W I3 J2 Z-0.03123
+echo:  G29 W I4 J2 Z-0.06893
+echo:  G29 W I0 J3 Z0.01495
+echo:  G29 W I1 J3 Z-0.01380
+echo:  G29 W I2 J3 Z-0.02737
+echo:  G29 W I3 J3 Z0.01125
+echo:  G29 W I4 J3 Z0.04772
+echo:  G29 W I0 J4 Z-0.02266
+echo:  G29 W I1 J4 Z0.03720
+echo:  G29 W I2 J4 Z-0.02489
+echo:  G29 W I3 J4 Z0.03901
+echo:  G29 W I4 J4 Z0.13356
+echo:; Delta (L<diagonal-rod> R<radius> H<height> S<seg-per-sec> XYZ<tower-angle-trim> ABC<rod-trim>):
+echo:  M665 L235.50 R113.54 H169.58 S200.00 X0.35 Y0.00 Z-0.35 A0.00 B0.00 C0.00
+echo:; Endstop adjustment:
+echo:  M666 X-0.42 Y-0.98 Z0.00
+echo:; Material heatup parameters:
+echo:  M145 S0 H180.00 B70.00 F255
+echo:  M145 S1 H240.00 B100.00 F255
+echo:; Hotend PID:
+echo:  M301 P22.20 I1.08 D114.00
+echo:; Z-Probe Offset:
+echo:  M851 X23.00 Y-10.00 Z-0.60 ; (mm)
+ok
+>>> M420 V
+Bilinear Leveling Grid:
+      0      1      2      3      4
+ 0 +0.203 +0.356 +0.091 +0.083 +0.083
+ 1 -0.007 -0.015 -0.019 +0.011 -0.013
+ 2 -0.025 +0.024 +0.051 -0.031 -0.069
+ 3 +0.015 -0.014 -0.027 +0.011 +0.048
+ 4 -0.023 +0.037 -0.025 +0.039 +0.134
+
+echo:Bed Leveling OFF
+ok
+>>> M105
+ok T:23.16 /0.00 B:25.40 /0.00 @:0 B@:0
