@@ -3,6 +3,7 @@ set -euo pipefail
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TEXTURE="$HERE/kossel_dragon_burner_bed.svg"
+PLATE_MODEL="$HERE/kossel_dragon_burner_plate.stl"
 
 if [ -n "${1:-}" ]; then
   ORCA_DIR="$1"
@@ -22,12 +23,14 @@ install_preset() {
   local source="$1" kind="$2" base_id="$3"
   local name
   name="$(basename "$source" .json)"
-  python3 - "$source" "$USER_DIR/$kind/$name.json" "$TEXTURE" <<'PY'
+  python3 - "$source" "$USER_DIR/$kind/$name.json" "$TEXTURE" "$PLATE_MODEL" <<'PY'
 import json, sys
-source, target, texture = sys.argv[1:4]
+source, target, texture, plate_model = sys.argv[1:5]
 preset = json.load(open(source, encoding="utf-8"))
 if "bed_custom_texture" in preset:
     preset["bed_custom_texture"] = texture
+if "bed_custom_model" in preset:
+    preset["bed_custom_model"] = plate_model
 json.dump(preset, open(target, "w", encoding="utf-8"), indent=4, ensure_ascii=False)
 PY
   printf 'sync_info = update\nuser_id = \nsetting_id = \nbase_id = %s\nupdated_time = %s\n' \
@@ -39,4 +42,5 @@ echo "Instalando em $USER_DIR"
 for preset in "$HERE"/machine/*.json; do install_preset "$preset" machine GM001; done
 for preset in "$HERE"/process/*.json; do install_preset "$preset" process GP004; done
 echo "Textura da mesa: $TEXTURE"
+echo "Modelo da mesa:  $PLATE_MODEL"
 echo "Reinicie o OrcaSlicer para carregar os perfis."

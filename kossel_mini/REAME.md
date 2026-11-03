@@ -53,7 +53,7 @@ O BLTouch encostou na correia da torre X com o bico em r≈90. As folgas medidas
 
 Como o firmware aceita qualquer ponto até r=105:
 - **Não mover o bico perto das torres pelo LCD** (Move Axis) nem com G1 manual.
-- Peças, saia, brim e purga só dentro da área verde da textura (o perfil do OrcaSlicer em `slicers/` já bloqueia o resto).
+- Peças, saia, brim e purga fora das zonas vermelhas da textura da mesa (`slicers/`). O fatiador não bloqueia essas zonas.
 - Calibração continua segura: anel do G33 a ≥19,9mm das torres; `G29 L-80 R70 F-90 B80` a ≥10,5mm; o "Level Bed" do LCD (grade padrão ±70) a ≥9,2mm. **Não aumentar `GRID_MAX_POINTS_X`**: com 7×7 a grade padrão encosta na torre Y.
 
 **Métricas de qualidade:**
@@ -92,9 +92,9 @@ Ajustar um plano nesses pontos e levar os três cantos à mesma altura. O parafu
 
 ## Fatiador
 
-Perfis do OrcaSlicer (impressora + processos 0.12 / 0.20 / 0.28), textura da mesa e instalação em [slicers/README.md](slicers/README.md). A área imprimível do perfil já exclui as zonas perto das torres.
+Perfis do OrcaSlicer (impressora + processos 0.12 / 0.20 / 0.28), textura e modelo da mesa e instalação em [slicers/README.md](slicers/README.md).
 
-Para outros fatiadores: mesa **circular, Ø210mm, origem no centro, altura máxima 115mm**, com a textura `slicers/bed_texture_dragon_burner.svg` (210×210mm em escala real: verde é a área segura, rosa são as zonas perto das torres, e os marcadores vermelhos apontam as torres X (frente-esquerda), Y (frente-direita) e Z (trás)).
+Mesa no fatiador: **circular, Ø210mm, origem no centro, altura máxima 115mm**, com a textura `slicers/orcaslicer/kossel_dragon_burner_bed.svg` (210×210mm em escala real, zonas das torres em vermelho: X frente-esquerda, Y frente-direita, Z trás). As zonas são só visuais: o fatiador não impede peças nelas.
 
 Nada pode sair de r=105: quando um movimento sai do círculo, o Marlin encolhe o vetor inteiro, **inclusive o Z** (`motion.cpp`, `apply_motion_limits`), e o bico desceria sobre a peça.
 

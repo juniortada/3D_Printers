@@ -2,39 +2,38 @@
 
 Perfis do OrcaSlicer para a Kossel Mini com o toolhead Dragon Burner (BLTouch `left`) e Marlin 2.1.2.9. Calibração e firmware estão no [README da impressora](../REAME.md).
 
-![Mesa no OrcaSlicer](orcaslicer/kossel_dragon_burner_bed.svg)
+![Mesa no OrcaSlicer](orcaslicer/preview.png)
 
 ## Arquivos
 
 | Caminho | O que é |
 |---|---|
-| `orcaslicer/machine/Kossel Mini Dragon Burner 0.4.json` | Impressora: área imprimível, G-code inicial/final, retração, limites do firmware |
+| `orcaslicer/machine/Kossel Mini Dragon Burner 0.4.json` | Impressora: mesa circular de Ø210, G-code inicial/final, retração, limites do firmware |
 | `orcaslicer/process/0.12mm Fine @Kossel Dragon Burner.json` | Processo 0.12mm |
 | `orcaslicer/process/0.20mm Standard @Kossel Dragon Burner.json` | Processo 0.20mm |
 | `orcaslicer/process/0.28mm Extra Draft @Kossel Dragon Burner.json` | Processo 0.28mm |
-| `orcaslicer/kossel_dragon_burner_bed.svg` | Textura da mesa do Orca (imagem acima) |
+| `orcaslicer/kossel_dragon_burner_bed.svg` | Textura da mesa: zonas das torres em vermelho, fundo transparente |
+| `orcaslicer/kossel_dragon_burner_plate.stl` | Modelo 3D da placa redonda (Ø216) |
+| `orcaslicer/preview.png` | Prévia da mesa (imagem acima) |
 | `orcaslicer/install.sh` | Instala os perfis no OrcaSlicer (Linux) |
-| `bed_texture_dragon_burner.svg` | Mapa da área segura em Ø210, para fatiadores com mesa circular |
 
-## Área imprimível
+## Mesa
 
-O firmware aceita um círculo de Ø210 e **não protege as torres**. O BLTouch encostou na correia da torre X com o bico em r≈90; com 10mm de folga, o bico pode avançar no máximo:
+A área imprimível é o círculo inteiro de Ø210 (origem no centro, altura máxima 115mm). O firmware aceita esse círculo e **não protege as torres**: o BLTouch encostou na correia da torre X com o bico em r≈90. As zonas em vermelho são onde a cabeça chegaria a menos de 10mm de uma correia:
 
-| Direção | Limite do bico (do centro) |
+| Direção | O bico pode ir até (do centro) |
 |---|---|
 | Torre X (frente-esquerda, lado do BLTouch) | 74,5mm |
 | Torre Y (frente-direita) | 83mm |
 | Torre Z (trás) | 92mm |
-| Entre as torres | 105mm |
+| Entre as torres | 105mm (borda da mesa) |
 
-No Orca, a área imprimível é o círculo de Ø210 cortado por uma reta diante de cada torre nesses limites (área verde da imagem). Ela é **convexa de propósito**: o Orca só verifica de verdade formas convexas; uma área com reentrâncias seria tratada pelo contorno externo e deixaria passar peças perto das torres. Por isso o recorte fica um pouco menor que a área segura exata (28.700mm² contra 31.000mm²).
+**O vermelho é só visual: o Orca não impede peças nessas zonas.** Testado: um cubo dentro da zona da torre X fatia normalmente (e bateria na correia). Então:
+- Posicione as peças, a saia e o brim fora do vermelho.
+- O **Arrange** (tecla A) não conhece as zonas e pode colocar peças nelas: confira depois de organizar.
+- Uma área imprimível recortada no formato das zonas não resolveria: o Orca só verifica o contorno externo de áreas não convexas, e testado assim ele também deixa passar peças no recorte.
 
-Com isso:
-- O Orca **recusa** peças fora da área (fatiar dá erro).
-- Saia ou brim que passem do limite geram o aviso **"A G-code path goes beyond the plate boundaries."** depois de fatiar. **Não ignore**: afaste a peça da borda. Numa peça encostada no limite da torre X, a saia de 5mm passou 3,4mm do limite.
-- Altura máxima: 115mm (com o bico perto das torres, o carro da torre bate no topo antes).
-
-A textura tem as setas e as letras das torres e grade de 10mm; o ponto (0,0) é o centro da mesa.
+O estilo segue a mesa da Voron no Orca: placa escura com a grade do próprio Orca, textura transparente com o vermelho `#fe0000` e o cinza `#bcbec0`.
 
 ## Instalar no OrcaSlicer
 
@@ -54,18 +53,17 @@ Se você estiver logado no Orca, os perfis ficam em `user/<seu id>` em vez de `u
 ORCA_USER_DIR=~/.var/app/com.orcaslicer.OrcaSlicer/config/OrcaSlicer/user/<id> ./install.sh
 ```
 
-O script copia os JSON, cria os `.info` e aponta a textura para este repositório (a textura não é copiada: se mover o repositório, rode o script de novo). Depois **reinicie o Orca**, selecione a impressora **Kossel Mini Dragon Burner 0.4** e um dos processos `@Kossel Dragon Burner`.
+O script copia os JSON, cria os `.info` e aponta a textura e o modelo da placa para este repositório (eles não são copiados: se mover o repositório, rode o script de novo). Depois **reinicie o Orca**, selecione a impressora **Kossel Mini Dragon Burner 0.4** e um dos processos `@Kossel Dragon Burner`.
 
 ### Outros sistemas (manual)
 
 1. **File → Import → Import Configs...** e selecione os 4 JSON (`machine/` e `process/`).
-2. **Printer settings → Basic information → Bed shape → Texture → Load**: escolha `orcaslicer/kossel_dragon_burner_bed.svg`.
+2. **Printer settings → Basic information → Bed shape**: em **Texture → Load** escolha `orcaslicer/kossel_dragon_burner_bed.svg` e em **Model → Load** escolha `orcaslicer/kossel_dragon_burner_plate.stl`.
 
 ### Conferir depois de instalar
 
-1. A mesa aparece com o formato da imagem acima e a textura alinhada (setas nas bordas retas).
+1. A mesa aparece redonda, com as zonas vermelhas na frente-esquerda (X, a maior), na frente-direita (Y) e atrás (Z), como na prévia.
 2. O tipo de mesa (Plate type) mostra **Textured PEI Plate**. Se o seu PEI for liso, troque para Smooth PEI / High Temp Plate.
-3. Arraste um cubo para perto da torre X (frente-esquerda) e fatie: o Orca tem que reclamar.
 
 ## Impressora
 
@@ -122,8 +120,8 @@ Os perfis não incluem filamento: use os genéricos do Orca (`Generic PLA @Syste
 
 ## Atualizar os perfis
 
-Ao mudar um perfil no Orca, copie os JSON de volta de `~/.var/app/com.orcaslicer.OrcaSlicer/config/OrcaSlicer/user/default/machine/` e `.../process/` para `orcaslicer/`. O caminho da textura pode ficar como estiver: o `install.sh` reescreve.
+Ao mudar um perfil no Orca, copie os JSON de volta de `~/.var/app/com.orcaslicer.OrcaSlicer/config/OrcaSlicer/user/default/machine/` e `.../process/` para `orcaslicer/`. Os caminhos da textura e do modelo podem ficar como estiverem: o `install.sh` reescreve.
 
 ## Outros fatiadores
 
-`bed_texture_dragon_burner.svg` tem 210×210mm em escala real para uma mesa circular de Ø210 com origem no centro: verde é a área segura exata, rosa são as zonas das torres. Nesses fatiadores a mesa é o círculo inteiro, então é você quem mantém as peças no verde.
+A textura tem 210×210mm em escala real e serve em qualquer fatiador com mesa circular de Ø210 e origem no centro (no PrusaSlicer: **Printer Settings → General → Bed shape → Texture**).
