@@ -99,15 +99,18 @@ Mesa no fatiador: **circular, Ø210mm, origem no centro, altura máxima 115mm**,
 Nada pode sair de r=105: quando um movimento sai do círculo, o Marlin encolhe o vetor inteiro, **inclusive o Z** (`motion.cpp`, `apply_motion_limits`), e o bico desceria sobre a peça.
 
 ```gcode
-M190 S{bed}                  ; mesa na temperatura
 G28
-G29 L-80 R70 F-90 B80        ; mesh fresca (~2 min); ou M420 S1 para usar a salva
+M190 S{bed}                  ; mesa na temperatura
+G33 O P1                     ; recalibra a altura com o probe no centro da mesa (~30s, faz o homing)
+G29 L-80 R70 F-90 B80        ; mesh fresca (~2 min)
 M109 S{hotend}
 G92 E0
 G1 X-40 Y-55 Z0.3 F3000      ; purga na frente, longe das torres
 G1 X40 Y-55 E15 F1000
 G92 E0
 ```
+
+**Por que o `G33 O P1` a cada impressão:** em 2026-11-02 a altura medida no centro mudou ~0,9mm duas vezes sem causa identificada: às 20:08, entre dois homings, com tudo frio; e depois da calibração das 20:47, quando um `G33 O P1` às 22h mediu o centro 0,95mm mais baixo (`H` 140,68 → 141,63), com a mesa ainda a 47°C de um aquecimento anterior. Com a mesa já quente, ele recalcula o `H` antes do mesh e a primeira camada não sente essa variação. O `O` põe o probe no centro da mesa (o bico fica em X33 Y11, longe das torres). Ele só corrige certo se o que muda é a mesa ou a estrutura; se for o BLTouch se mexendo no suporte, o teste do papel no centro mostra a diferença.
 
 Os limites `L-80 R70 F-90 B80` foram escolhidos para que todo ponto sondado deixe a cabeça a ≥10,5mm das torres: 18 pontos reais, cobrindo 79% da área segura. Não use outros limites sem refazer essa conta.
 
