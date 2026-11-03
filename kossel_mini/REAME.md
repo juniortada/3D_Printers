@@ -15,6 +15,7 @@ Base: exemplo oficial `config/examples/delta/kossel_mini/Configuration.h` do Mar
 | Mesa | 3 parafusos com mola (entre as torres, cada um mais perto de X, Y e Z), PEI magnético |
 | Área de impressão | **Ø210mm** (raio 105), menos as zonas perto das torres — ver [slicers](slicers/README.md) |
 | Haste diagonal | 235.5mm |
+| Carros | Guias lineares MGN (antes: patins de esferas) |
 | Drivers X/Y/Z | DRV8825 com 3 jumpers (1/32 microsteps → 160 steps/mm) |
 | Driver E0 | A4988 |
 | Termistores | Hotend e cama: 100k genérico (`TEMP_SENSOR_0=1`, `TEMP_SENSOR_BED=1`) |
@@ -34,8 +35,8 @@ Base: exemplo oficial `config/examples/delta/kossel_mini/Configuration.h` do Mar
 | `DELTA_TOWER_ANGLE_TRIM` | **{ -0.01, 0.08, -0.07 }** | G33 V3 |
 | `NOZZLE_TO_PROBE_OFFSET` | **{ -33.24, -10.88, -3.90 }** | XY das STLs do projeto; Z pelo teste do cartão (~0,3mm) |
 | `DEFAULT_KP` / `KI` / `KD` | **25.70 / 2.83 / 58.42** | `M303 E0 S220 C8` com a ventoinha de peça desligada |
-| `DEFAULT_MAX_ACCELERATION` | { 2000, 2000, 2000, 500 } | Toolhead mais pesado; E500 era o valor da EEPROM |
-| `DEFAULT_ACCELERATION` / `RETRACT` / `TRAVEL` | 700 / 5000 / 2000 | P e R da EEPROM antiga; travel reduzido pelo peso |
+| `DEFAULT_MAX_ACCELERATION` | { 3000, 3000, 3000, 500 } | Guias MGN; 30 deslocamentos a 150mm/s com acel. 3000 mudaram o centro em no máximo 0,06mm (sem perda de passo). E500 era o valor da EEPROM |
+| `DEFAULT_ACCELERATION` / `RETRACT` / `TRAVEL` | 1500 / 5000 / 3000 | Guias MGN (mesmo teste acima); R da EEPROM antiga |
 | `DEFAULT_EJERK` | 1.5 | Valor da EEPROM antiga |
 
 ### Zonas proibidas perto das torres

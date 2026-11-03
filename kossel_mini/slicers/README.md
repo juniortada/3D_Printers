@@ -71,7 +71,7 @@ O script copia os JSON, cria os `.info` e aponta a textura e o modelo da placa p
 |---|---|
 | G-code | `marlin2`, extrusão relativa (`M83`) com `G92 E0` a cada camada |
 | Retração | 2,8mm a 55mm/s, retorno a 35mm/s, wipe 0,5mm, z-hop 0,4mm só em superfícies de topo |
-| Limites da máquina | Os do firmware (acel. 2000, impressão 700, retração 5000, E 500, jerk 10 / E 1,5); `emit_machine_limits_to_gcode` desligado: servem só para estimar o tempo |
+| Limites da máquina | Os do firmware (acel. 3000, impressão 1500, deslocamento 3000, retração 5000, E 500, jerk 10 / E 1,5); `emit_machine_limits_to_gcode` desligado: servem só para estimar o tempo |
 
 A retração veio do perfil antigo da Kossel (bowden, mesmo extrusor); vale refazer o teste de retração do Orca (**Calibration → Retraction test**) com o hotend do Dragon Burner.
 
@@ -99,7 +99,7 @@ Com a mesa já quente, o `G33 O P1` mede o centro e recalcula a altura, e só en
 
 ## Processos
 
-Comum aos três: aceleração 700 (paredes externas e topo 500, primeira camada 400, deslocamento 2000, pontes 50%), deslocamento a 120mm/s, saia de 1 volta a 5mm, costura alinhada, arc fitting desligado (o Marlin segmenta arcos na delta).
+Comum aos três: aceleração 1500 (paredes externas e topo 1000, primeira camada 500, deslocamento 3000, pontes 50%), deslocamento a 150mm/s, saia de 1 volta a 5mm, costura alinhada, arc fitting desligado (o Marlin segmenta arcos na delta).
 
 | | 0.12mm Fine | 0.20mm Standard | 0.28mm Extra Draft |
 |---|---|---|---|
@@ -107,12 +107,17 @@ Comum aos três: aceleração 700 (paredes externas e topo 500, primeira camada 
 | Paredes | 3 | 3 | 2 |
 | Topo / fundo | 6 / 5 | 4 / 3 | 3 / 3 |
 | Preenchimento | 15% gyroid | 15% gyroid | 12% grid |
-| Parede externa / interna | 25 / 40mm/s | 30 / 50mm/s | 35 / 55mm/s |
-| Preenchimento / sólido | 50 / 40mm/s | 60 / 50mm/s | 65 / 55mm/s |
-| Topo | 20mm/s | 25mm/s | 30mm/s |
-| Primeira camada | 15mm/s | 20mm/s | 20mm/s |
+| Parede externa / interna | 40 / 70mm/s | 50 / 90mm/s | 50 / 90mm/s |
+| Preenchimento / sólido | 90 / 70mm/s | 110 / 90mm/s | 110 / 90mm/s |
+| Topo | 40mm/s | 50mm/s | 50mm/s |
+| Primeira camada | 20mm/s | 25mm/s | 25mm/s |
 
-As velocidades seguem os perfis antigos da Kossel; o toolhead é bem mais pesado que o J-head, então suba aos poucos.
+Velocidades para as guias MGN, cerca do dobro das dos patins antigos. No 0.20, um cubo de 20mm cai de 29min43s para 21min29s e uma caixa de 60×60×10mm de 1h31 para 1h01 (estimativa do Orca com o PLA genérico).
+
+O que limita daqui para cima:
+- **Vazão do filamento**: o PLA genérico do Orca limita a 12mm³/s; no 0.28, o preenchimento a 110mm/s passa disso e o Orca reduz sozinho.
+- **Peças pequenas**: o tempo mínimo por camada do filamento (4s no PLA genérico) e a aceleração em segmentos curtos (curvas do gyroid) seguram a velocidade; subir as velocidades quase não muda um cubo de 20mm.
+- **Placa AVR com 1/32 de micropasso**: numa delta o Mega segmenta cada movimento; acima de ~150mm/s podem aparecer travadinhas. Para ir além, o caminho é 1/16 de micropasso (80 passos/mm) ou uma placa 32 bits.
 
 ## Filamento
 

@@ -120,32 +120,32 @@
     ],
     "emit_machine_limits_to_gcode": "0",
     "machine_max_acceleration_x": [
-        "2000",
-        "2000"
+        "3000",
+        "3000"
     ],
     "machine_max_acceleration_y": [
-        "2000",
-        "2000"
+        "3000",
+        "3000"
     ],
     "machine_max_acceleration_z": [
-        "2000",
-        "2000"
+        "3000",
+        "3000"
     ],
     "machine_max_acceleration_e": [
         "500",
         "500"
     ],
     "machine_max_acceleration_extruding": [
-        "700",
-        "700"
+        "1500",
+        "1500"
     ],
     "machine_max_acceleration_retracting": [
         "5000",
         "5000"
     ],
     "machine_max_acceleration_travel": [
-        "2000",
-        "2000"
+        "3000",
+        "3000"
     ],
     "machine_max_speed_x": [
         "500",
