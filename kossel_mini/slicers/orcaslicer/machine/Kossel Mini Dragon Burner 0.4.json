@@ -180,7 +180,7 @@
         "1.5"
     ],
     "use_relative_e_distances": "1",
-    "machine_start_gcode": "; Kossel Mini + Dragon Burner, Marlin 2.1.2.9\nG90\nM83\nM140 S[bed_temperature_initial_layer_single]\nG28\nM190 S[bed_temperature_initial_layer_single]\nG33 O P1 ; recalibra a altura com o probe no centro da mesa (faz o homing)\nG29 L-80 R70 F-90 B80 ; grade com todos os pontos a >= 10 mm das torres\nG1 X0 Y-60 Z10 F3000\nM104 S[nozzle_temperature_initial_layer]\nM109 S[nozzle_temperature_initial_layer]\nG92 E0\nG1 X-40 Y-55 Z0.3 F3000 ; purga na frente, longe das torres\nG1 X40 Y-55 E15 F1000\nG92 E0\nG1 Z2 F3000",
+    "machine_start_gcode": "; Kossel Mini + Dragon Burner, Marlin 2.1.2.9\nG90\nM83\nM140 S[bed_temperature_initial_layer_single]\nG28\nM190 S[bed_temperature_initial_layer_single]\nG33 O P1 ; recalibra a altura com o probe no centro da mesa (faz o homing)\nG29 L-80 R70 F-90 B80 ; grade com todos os pontos a >= 10 mm das torres\nG1 X-30 Y-80 Z10 F3000 ; espera o bico aquecer fora da área das peças\nM104 S[nozzle_temperature_initial_layer]\nM109 S[nozzle_temperature_initial_layer]\nG92 E0\nG1 X-30 Y-80 Z0.3 F3000 ; purga na frente, fora de peças de até 140 mm e longe das torres\nG1 X30 Y-80 E12 F1000\nG92 E0\nG1 Z2 F3000",
     "machine_end_gcode": "G92 E0\nG1 E-3 F2100\nM104 S0\nM140 S0\nM107\nG28 ; delta: o efetor sobe ao topo, longe da peca\nM84",
     "layer_change_gcode": ";AFTER_LAYER_CHANGE\n;[layer_z]\nG92 E0",
     "version": "2.3.0.3"

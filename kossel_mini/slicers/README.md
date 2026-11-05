@@ -12,6 +12,7 @@ Perfis do OrcaSlicer para a Kossel Mini com o toolhead Dragon Burner (BLTouch `l
 | `orcaslicer/process/0.12mm Fine @Kossel Dragon Burner.json` | Processo 0.12mm |
 | `orcaslicer/process/0.20mm Standard @Kossel Dragon Burner.json` | Processo 0.20mm |
 | `orcaslicer/process/0.28mm Extra Draft @Kossel Dragon Burner.json` | Processo 0.28mm |
+| `orcaslicer/process/0.20mm Calibração @Kossel Dragon Burner.json` | Processo para peças de calibração: o 0.20 sem saia e com paredes a 40mm/s |
 | `orcaslicer/kossel_dragon_burner_bed.svg` | Textura da mesa: zonas das torres em vermelho, fundo transparente |
 | `orcaslicer/kossel_dragon_burner_plate.stl` | Modelo 3D da placa redonda (Ø216) |
 | `orcaslicer/preview.png` | Prévia da mesa (imagem acima) |
@@ -85,12 +86,12 @@ G28
 M190 S[bed_temperature_initial_layer_single]
 G33 O P1                  ; recalibra a altura com o probe no centro da mesa (faz o homing)
 G29 L-80 R70 F-90 B80     ; mesh com todos os pontos a >= 10mm das torres
-G1 X0 Y-60 Z10 F3000
+G1 X-30 Y-80 Z10 F3000    ; espera o bico aquecer fora da área das peças
 M104 S[nozzle_temperature_initial_layer]
 M109 S[nozzle_temperature_initial_layer]
 G92 E0
-G1 X-40 Y-55 Z0.3 F3000   ; purga na frente, longe das torres
-G1 X40 Y-55 E15 F1000
+G1 X-30 Y-80 Z0.3 F3000   ; purga na frente, fora de peças de até 140 mm e longe das torres
+G1 X30 Y-80 E12 F1000
 G92 E0
 G1 Z2 F3000
 ```
@@ -111,6 +112,10 @@ Comum aos três: aceleração 1500 (paredes externas e topo 1000, primeira camad
 | Preenchimento / sólido | 90 / 70mm/s | 110 / 90mm/s | 110 / 90mm/s |
 | Topo | 40mm/s | 50mm/s | 50mm/s |
 | Primeira camada | 20mm/s | 25mm/s | 25mm/s |
+
+**0.20mm Calibração**: igual ao 0.20 instalado, mas sem saia (a saia a 5mm de uma peça de 140mm passaria do limite da torre X) e com paredes, topo e sólido a 40mm/s e preenchimento a 60mm/s. Feito para a peça de calibração do Klipper (`calibrate_size.stl`), que pede ~40mm/s.
+
+A purga fica em Y=−80, de X=−30 a 30: a 10mm de uma peça de 140mm centrada e com projeção de 66mm nas direções das torres X e Y (limites 74,5 e 83). Antes ela ficava em Y=−55, por cima da base de peças com mais de ~110mm.
 
 Velocidades para as guias MGN, cerca do dobro das dos patins antigos. No 0.20, um cubo de 20mm cai de 29min43s para 21min29s e uma caixa de 60×60×10mm de 1h31 para 1h01 (estimativa do Orca com o PLA genérico).
 
