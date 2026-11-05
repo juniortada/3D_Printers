@@ -85,7 +85,7 @@ M140 S[bed_temperature_initial_layer_single]
 G28
 M190 S[bed_temperature_initial_layer_single]
 G33 O P1                  ; recalibra a altura com o probe no centro da mesa (faz o homing)
-G29 L-80 R70 F-90 B80     ; mesh com todos os pontos a >= 10mm das torres
+M420 S0                   ; sem malha: fora do centro o probe não acompanha a altura do bico
 G1 X-30 Y-80 Z10 F3000    ; espera o bico aquecer fora da área das peças
 M104 S[nozzle_temperature_initial_layer]
 M109 S[nozzle_temperature_initial_layer]
@@ -96,7 +96,9 @@ G92 E0
 G1 Z2 F3000
 ```
 
-Com a mesa já quente, o `G33 O P1` mede o centro e recalcula a altura, e só então o mesh é sondado: a altura medida no centro já variou ~0,9mm sem causa identificada (ver o README da impressora). Não troque os limites do `G29` sem refazer a conta de folga (ver o README da impressora): com a área de Ø210, um `G29` sem limites ou com outra grade pode levar a cabeça até a correia.
+Com a mesa já quente, o `G33 O P1` mede o centro e recalcula a altura. A mesa é fixa (sem molas) e a leitura do probe fica estável desde o primeiro minuto a 50 °C, então não precisa esperar depois do `M190`.
+
+O gcode não usa malha (`G29`). Fora do centro, a leitura do BLTouch não acompanha a altura do bico: com a geometria calibrada, o probe ainda lê o fundo e o lado esquerdo 0,4 a 0,6 mm acima do centro, e a malha levantava o bico ali (na peça de calibração de 2026-11-04, os pilares do fundo e o da torre Y ficaram longe da mesa). Se voltar a usar o `G29`, não troque os limites `L-80 R70 F-90 B80` sem refazer a conta de folga (ver o README da impressora): com a área de Ø210, um `G29` sem limites ou com outra grade pode levar a cabeça até a correia.
 
 ## Processos
 

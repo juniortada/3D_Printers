@@ -1,0 +1,19 @@
+{
+  "printed_with": {
+    "M665": {"L": 235.5, "R": 112.71, "H": 143.03, "X": -0.23, "Y": 0.22, "Z": 0.01},
+    "M666": {"X": 0.0, "Y": -1.37, "Z": -1.42}
+  },
+  "center_dists": [73.2, 72.7, 73.5, 72.7, 73.0, 74.0],
+  "outer_dists": [74.0, 73.0, 72.5, 74.1, 73.0, 73.0],
+  "center_pillar_widths": [8.3, 8.5, 8.1],
+  "outer_pillar_widths": [8.5, 8.5, 8.5, 9.0, 9.0, 9.0],
+  "first_layer": [
+    {"name": "centro", "x": 0.0, "y": 0.0, "nozzle_error_mm": 0.0},
+    {"name": "torre X", "x": -51.96, "y": -30.0, "nozzle_error_mm": 0.0},
+    {"name": "torre Y", "x": 51.96, "y": -30.0, "nozzle_error_mm": 0.0},
+    {"name": "torre Z", "x": 0.0, "y": 60.0, "nozzle_error_mm": -0.1},
+    {"name": "Y-Z", "x": 51.96, "y": 30.0, "nozzle_error_mm": 0.0},
+    {"name": "Z-X", "x": -51.96, "y": 30.0, "nozzle_error_mm": 0.0},
+    {"name": "frente", "x": 0.0, "y": -60.0, "nozzle_error_mm": -0.1}
+  ]
+}

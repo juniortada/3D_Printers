@@ -958,17 +958,17 @@
   #define DELTA_DIAGONAL_ROD 235.5        // (mm)
 
   // Distance between bed and nozzle Z home position
-  #define DELTA_HEIGHT 140.68             // (mm) G33 V3 2026-11-02 after bed leveling, stddev 0.02
+  #define DELTA_HEIGHT 151.78             // (mm) 2026-11-04, fixed bed (no springs); G33 O P1 refreshes it before each print
 
-  #define DELTA_ENDSTOP_ADJ { -0.13, 0.00, -0.04 } // (mm) G33 V3 2026-11-02
+  #define DELTA_ENDSTOP_ADJ { 0.00, -1.86, -0.40 } // (mm) 2026-11-04, nozzle-based (pad prints), fixed bed
 
   // Horizontal distance bridged by diagonal push rods when effector is centered.
-  #define DELTA_RADIUS 113.84             // (mm) G33 V3 2026-11-02
+  #define DELTA_RADIUS 113.15             // (mm) 2026-11-04, Klipper calibration object
 
   // Trim adjustments for individual towers
   // tower angle corrections for X and Y tower / rotate XYZ so Z tower angle = 0
   // measured in degrees anticlockwise looking from above the printer
-  #define DELTA_TOWER_ANGLE_TRIM { -0.01, 0.08, -0.07 } // G33 V3 2026-11-02
+  #define DELTA_TOWER_ANGLE_TRIM { 1.19, 0.71, 0.01 } // 2026-11-04, Klipper calibration object
 
   // Delta radius and diagonal rod adjustments
   //#define DELTA_RADIUS_TRIM_TOWER       { 0.0, 0.0, 0.0 } // (mm)
@@ -1523,7 +1523,7 @@
  *     |    [-]    |
  *     O-- FRONT --+
  */
-#define NOZZLE_TO_PROBE_OFFSET { -33.24, -10.88, -3.90 } // Dragon Burner BLTouch left: XY from the STLs, Z from a card test
+#define NOZZLE_TO_PROBE_OFFSET { -33.24, -10.88, -3.30 } // Dragon Burner BLTouch left: XY from the STLs, Z from first-layer prints
 
 // Most probes should stay away from the edges of the bed, but
 // with NOZZLE_AS_PROBE this can be negative for a wider probing area.
