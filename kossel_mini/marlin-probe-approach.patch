@@ -1,0 +1,11 @@
+--- a/Marlin/src/module/probe.cpp	2026-11-04 13:53:26.379070068 -0300
++++ b/Marlin/src/module/probe.cpp	2026-11-04 13:53:26.382070166 -0300
+@@ -756,7 +756,7 @@
+ 
+     // If the nozzle is well over the travel height then
+     // move down quickly before doing the slow probe
+-    const float z = (Z_CLEARANCE_DEPLOY_PROBE) + 5.0f + (offset.z < 0 ? -offset.z : 0);
++    const float z = (Z_CLEARANCE_BETWEEN_PROBES) + (offset.z < 0 ? -offset.z : 0);
+     if (current_position.z > z) {
+       // Probe down fast. If the probe never triggered, raise for probe clearance
+       if (!probe_down_to_z(z, z_probe_fast_mm_s))

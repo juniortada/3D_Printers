@@ -183,7 +183,7 @@ Os endstops ficam no topo das torres. O home sempre sobe.
 #define DELTA_TOWER_ANGLE_TRIM { -0.01, 0.08, -0.07 }
 ```
 
-`DELTA_HEIGHT` é o valor mais crítico. No Marlin 2.x ele é referenciado ao gatilho do probe: no homing o Z fica em `DELTA_HEIGHT - NOZZLE_TO_PROBE_OFFSET.z`. Depois de trocar o toolhead, **meça antes de mover**: `G28`, descer até Z=20 e conferir com a régua. Com a troca para o Dragon Burner, o valor antigo estava 35mm acima do real. O G33 desce até Z=50 para baixar o pino, o que teria batido o bico.
+`DELTA_HEIGHT` é o valor mais crítico. No Marlin 2.x ele é referenciado ao gatilho do probe: no homing o Z fica em `DELTA_HEIGHT - NOZZLE_TO_PROBE_OFFSET.z`. Depois de trocar o toolhead, **meça antes de mover**: `G28`, descer até Z=20 e conferir com a régua. Com a troca para o Dragon Burner, o valor antigo estava 35mm acima do real. A sondagem desce rápido até Z=8,3 sem tocar na mesa (seção 10): com a altura errada, ela bateria o bico.
 
 ---
 
@@ -246,6 +246,55 @@ Necessário para que M500/M501 funcionem. Sem isso, os valores do G33 só sobrev
 
 ---
 
+### 10. Velocidade da sondagem e do homing
+
+```cpp
+#define XY_PROBE_FEEDRATE (100*60)
+#define Z_PROBE_FEEDRATE_FAST (50*60)
+#define Z_PROBE_FEEDRATE_SLOW (5*60)
+//#define MULTIPLE_PROBING 2
+#define Z_CLEARANCE_DEPLOY_PROBE   10
+#define Z_CLEARANCE_BETWEEN_PROBES  5
+#define HOMING_FEEDRATE_MM_M { (60*60), (60*60), (60*60) }
+```
+
+Cada ponto é **um toque lento**. Com `MULTIPLE_PROBING 2` o Marlin devolve `(lento×3 + rápido×2)/5`, e o toque rápido entra na medida. Com um toque só, o rápido só aproxima o probe e não encosta na mesa.
+
+**Patch no Marlin** (`Marlin/src/module/probe.cpp`, `run_z_probe`): a aproximação rápida para em `Z_CLEARANCE_BETWEEN_PROBES + |offset Z|` (8,3mm, com o gatilho do pino a 5mm da mesa), em vez de `Z_CLEARANCE_DEPLOY_PROBE + 5 + |offset Z|` (18,3mm). O toque lento fica com 5mm, cerca de 1s. Se a aproximação tocar a mesa antes, o Marlin sobe 5mm e mede devagar. O patch está em `marlin-probe-approach.patch`. Reaplicar ao trocar a versão do Marlin:
+
+```bash
+cd /home/junior/Documentos/upload/Marlin-2.1.2.9-kossel
+patch -p1 < /home/junior/Projetos/3D_Printers/kossel_mini/marlin-probe-approach.patch
+```
+
+| | Antes (2026-11-02) | Agora |
+|---|---|---|
+| `G30` | 16s | 6s |
+| `G33 O P1` | ~20s | ~13s |
+| `G29 L-80 R70 F-90 B80` (18 pontos) | ~120s | 63s |
+| Homing, 6 ciclos (centro) | ≤0,07mm | ≤0,10mm |
+
+**Não acelerar o homing.** Com o homing a 100mm/s e recuo de 3mm, a posição de home saltou ~1mm entre um homing e outro. Esse salto equivale a uma torre errando 3mm, que é o recuo, como um switch que não soltou ao recuar. Os endstops ficam nos esticadores das correias. Com 60mm/s e recuo de 5/5/2mm (`HOMING_BUMP_MM` padrão), a variação volta para ≤0,1mm. Na mesma rodada o `XY_PROBE_FEEDRATE` estava em 150, e voltou para 100 junto com o homing: essa velocidade não foi testada sozinha.
+
+**`BLTOUCH_HS_MODE` não foi ligado.** Ele economizaria ~1s por ponto do `G29`, mas acrescenta um campo na EEPROM, que voltaria aos padrões na gravação.
+
+**Homing a 80mm/s também foi testado** (recuo 5/5/2mm, segundo toque a 27/16mm/s): a posição de home variou 0,29mm em 10 ciclos e o primeiro toque depois do homing saía 0,1–0,2mm alto. Fica em 60mm/s.
+
+---
+
+### 11. Cantos da grade do G29
+
+Com `G29 L-80 R70 F-90 B80`, 7 dos 25 pontos da grade ficam fora do alcance do probe: (−80,−90), (70,−90), (70,−47,5), (70,37,5), (−80,80), (32,5,80) e (70,80). No Marlin original, numa delta, o `G29` copia a grade salva e só zera tudo quando os limites mudam. Esses 7 pontos eram preenchidos (extrapolados) só no primeiro `G29` e depois **nunca mais mudavam**: até 2026-11-04 eles vinham do mesh de 2026-11-02, ainda com os carros antigos. Comparados com o mesh de 2026-11-04, erravam até 0,73mm. Na impressão com `G29`, isso baixava o bico 0,24mm no pino fundo-direito da peça de XY e até 0,9mm na borda do fundo. Os pontos à esquerda e o centro não eram afetados.
+
+**Patch** (`Marlin/src/gcode/bedlevel/abl/G29.cpp`, `marlin-g29-reset-grid.patch`): a grade é zerada a todo `G29`, e os 7 pontos são extrapolados da medição nova.
+
+```bash
+cd /home/junior/Documentos/upload/Marlin-2.1.2.9-kossel
+patch -p1 < /home/junior/Projetos/3D_Printers/kossel_mini/marlin-g29-reset-grid.patch
+```
+
+---
+
 ## Fluxo de configuração inicial
 
 1. Compilar (`pio run -e mega2560`) e fazer upload (`pio run -e mega2560 -t upload`)
@@ -273,7 +322,9 @@ cp "$SRC/Configuration.h"     "$DST/Configuration.h"
 cp "$SRC/Configuration_adv.h" "$DST/Configuration_adv.h"
 ```
 
+Ao mudar o `probe.cpp` ou o `G29.cpp`, refazer o patch correspondente (seções 10 e 11).
+
 | Caminho | Estrutura |
 |---|---|
-| `/home/junior/Documentos/upload/Marlin-2.1.2.9-kossel/` | árvore Marlin completa (compila daqui) |
-| `/home/junior/Projetos/3D_Printers/kossel_mini/` | backup dos `.h`, `firmware-2.1.2.9-dragon-burner.hex` (o gravado em 2026-11-02) e os perfis de fatiador em `slicers/` |
+| `/home/junior/Documentos/upload/Marlin-2.1.2.9-kossel/` | árvore Marlin completa, com os patches do `probe.cpp` e do `G29.cpp` aplicados (compila daqui) |
+| `/home/junior/Projetos/3D_Printers/kossel_mini/` | backup dos `.h`, `marlin-probe-approach.patch`, `marlin-g29-reset-grid.patch`, `firmware-2.1.2.9-dragon-burner.hex` (o gravado em 2026-11-04) e os perfis de fatiador em `slicers/` |

@@ -1,0 +1,11 @@
+--- a/Marlin/src/gcode/bedlevel/abl/G29.cpp	2026-11-04 14:33:08.305292441 -0300
++++ b/Marlin/src/gcode/bedlevel/abl/G29.cpp	2026-11-04 14:33:08.310292066 -0300
+@@ -507,7 +507,7 @@
+     #endif
+ 
+     #if ENABLED(AUTO_BED_LEVELING_BILINEAR)
+-      if (!abl.dryrun && (abl.gridSpacing != bedlevel.grid_spacing || abl.probe_position_lf != bedlevel.grid_start)) {
++      if (!abl.dryrun) {
+         reset_bed_level();      // Reset grid to 0.0 or "not probed". (Also disables ABL)
+         abl.reenable = false;   // Can't re-enable (on error) until the new grid is written
+       }
